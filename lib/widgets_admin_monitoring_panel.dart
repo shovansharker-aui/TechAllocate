@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform;
 import 'package:flutter/material.dart';
 import 'widgets_live_activity_grid.dart';
-import 'widgets_available_technicians.dart';
 import 'widgets_completed_tasks_section.dart';
 import 'services/android_widget_service.dart';
 import 'models/app_user.dart';
@@ -75,10 +74,6 @@ class AdminMonitoringPanel extends StatelessWidget {
                       ]),
                     ]);
                   }),
-                  const SizedBox(height: 18),
-                  const Text('Available Junior Officers', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 8),
-                  const AvailableTechnicians(),
                   const SizedBox(height: 18),
                   const Text('Running Task', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
