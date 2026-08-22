@@ -1,0 +1,55 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.0'
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # --split-per-abi produces one smaller APK per CPU architecture
+      # instead of one large "fat" APK containing all of them. Most
+      # phones are arm64-v8a — that's the one to hand out by default.
+      - name: Build release APKs (split per ABI)
+        run: flutter build apk --release --split-per-abi
+
+      - name: Upload APKs as downloadable artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: techallocate-apks
+          path: |
+            build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+            build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
+            build/app/outputs/flutter-apk/app-x86_64-release.apk
+
+      - name: Publish as a public GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: Latest build
+          body: |
+            Automatically built from the latest push to master.
+
+            Most phones (nearly all modern Android devices): download **app-arm64-v8a-release.apk**
+            Older/32-bit devices: app-armeabi-v7a-release.apk
+            Emulators/x86 devices: app-x86_64-release.apk
+          files: |
+            build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+            build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
+            build/app/outputs/flutter-apk/app-x86_64-release.apk
+          make_latest: true

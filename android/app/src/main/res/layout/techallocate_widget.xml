@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:background="#F4F6FB">
+
+    <TextView
+        android:id="@+id/widget_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TechAllocate"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="#202124" />
+
+    <TextView
+        android:id="@+id/widget_maintenance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:text="Maintenance Ongoing: 0"
+        android:textSize="13sp"
+        android:textColor="#202124" />
+
+    <TextView
+        android:id="@+id/widget_engaged"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Person Engaged: 0"
+        android:textSize="13sp"
+        android:textColor="#202124" />
+
+    <TextView
+        android:id="@+id/widget_free"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Person Free: 0"
+        android:textSize="13sp"
+        android:textColor="#202124" />
+</LinearLayout>

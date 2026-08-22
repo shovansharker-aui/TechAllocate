@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "450230704371",
+    "project_id": "techallocate",
+    "storage_bucket": "techallocate.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:450230704371:android:cc153f15e4d960bd343f86",
+        "android_client_info": {
+          "package_name": "com.techallocate.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJLaPHtD63krzm5RI_xHuUiOLvDY059PE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
