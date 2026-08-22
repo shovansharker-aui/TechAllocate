@@ -52,16 +52,6 @@ class AdminWebDashboardScreen extends StatelessWidget {
                 'Admin Dashboard',
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
-              const Spacer(),
-              FilledButton.icon(
-                onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => const AdminWebSettingsScreen(),
-                  ),
-                ),
-                icon: const Icon(Icons.settings_outlined),
-                label: const Text('Settings'),
-              ),
             ],
           ),
         ),
