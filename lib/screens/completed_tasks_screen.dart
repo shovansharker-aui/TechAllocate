@@ -99,12 +99,7 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
     return '${s}s';
   }
 
-  String _type(WorkOrder order) {
-    if (order.type == 'preventive' && order.preventiveTypes.isNotEmpty) {
-      return '${taskTypeCode(order.type)} · ${order.preventiveTypes.join(', ')}';
-    }
-    return taskTypeCode(order.type);
-  }
+
 
   String _typeDetail(WorkOrder order) {
     if (order.type == 'preventive' && order.preventiveTypes.isNotEmpty) {
