@@ -3,21 +3,14 @@ import 'package:flutter/material.dart';
 import 'models/app_user.dart';
 import 'models/helper.dart';
 import 'models/machine.dart';
+import 'utils/task_type.dart';
 import 'models/work_order.dart';
 import 'screens/completed_tasks_screen.dart';
 
 class CompletedTasksSection extends StatelessWidget {
   const CompletedTasksSection({super.key});
 
-  String _type(WorkOrder order) {
-    switch (order.type) {
-      case 'preventive': return 'PM';
-      case 'breakdown': return 'BM';
-      case 'calibration': return 'CL';
-      case 'adjustment': return 'AD';
-      default: return order.type.toUpperCase();
-    }
-  }
+  String _type(WorkOrder order) => taskTypeCode(order.type);
 
   String _duration(int? seconds) {
     if (seconds == null) return '—';

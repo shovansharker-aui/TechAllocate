@@ -4,6 +4,7 @@ import '../models/helper.dart';
 import '../models/machine.dart';
 import '../models/work_order.dart';
 import '../models/app_user.dart';
+import '../utils/task_type.dart';
 
 class CompletedTasksScreen extends StatefulWidget {
   const CompletedTasksScreen({super.key});
@@ -99,18 +100,10 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
   }
 
   String _type(WorkOrder order) {
-    switch (order.type) {
-      case 'preventive':
-        return order.preventiveTypes.isEmpty ? 'PM' : 'PM · ${order.preventiveTypes.join(', ')}';
-      case 'breakdown':
-        return 'BM';
-      case 'calibration':
-        return 'CL';
-      case 'adjustment':
-        return 'AD';
-      default:
-        return order.type.toUpperCase();
+    if (order.type == 'preventive' && order.preventiveTypes.isNotEmpty) {
+      return '${taskTypeCode(order.type)} · ${order.preventiveTypes.join(', ')}';
     }
+    return taskTypeCode(order.type);
   }
 
   String _typeDetail(WorkOrder order) {
@@ -170,7 +163,7 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                 return Card(
                   margin: const EdgeInsets.only(bottom: 8),
                   child: ExpansionTile(
-                    leading: CircleAvatar(child: Text(_type(order).split(' ').first)),
+                    leading: CircleAvatar(child: Text(taskTypeCode(order.type))),
                     title: Text(machine?.equipmentName ?? order.machineId, maxLines: 1, overflow: TextOverflow.ellipsis),
                     subtitle: Text([
                       if (_typeDetail(order).isNotEmpty) _typeDetail(order),

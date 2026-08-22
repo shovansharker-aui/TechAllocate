@@ -6,6 +6,7 @@ import 'models/helper.dart';
 import 'models/machine.dart';
 import 'models/work_order.dart';
 import 'models/app_user.dart';
+import 'utils/task_type.dart';
 
 class LiveActivityGrid extends StatefulWidget {
   const LiveActivityGrid({super.key});
@@ -33,15 +34,7 @@ class _LiveActivityGridState extends State<LiveActivityGrid> {
     super.dispose();
   }
 
-  static String _typeCode(WorkOrder order) {
-    switch (order.type) {
-      case 'preventive': return 'PM';
-      case 'breakdown': return 'BM';
-      case 'calibration': return 'CL';
-      case 'adjustment': return 'AD';
-      default: return order.type.toUpperCase();
-    }
-  }
+  static String _typeCode(WorkOrder order) => taskTypeCode(order.type);
 
   static String _duration(DateTime? startedAt) {
     if (startedAt == null) return '';

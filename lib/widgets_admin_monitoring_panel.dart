@@ -50,28 +50,38 @@ class AdminMonitoringPanel extends StatelessWidget {
                   );
                 });
                 return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  LayoutBuilder(builder: (context, constraints) {
+                  Builder(builder: (context) {
                     final isAndroid = !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
-                    // Android always shows the two summary cards side by side (1 row, 2 columns);
-                    // other platforms fall back to a width-based breakpoint.
-                    final columns = isAndroid ? 2 : (constraints.maxWidth >= 650 ? 2 : 1);
-                    return GridView.count(crossAxisCount: columns, shrinkWrap: true, physics: const NeverScrollableScrollPhysics(), crossAxisSpacing: 12, mainAxisSpacing: 12, childAspectRatio: columns == 1 ? 2.4 : 1.7, children: [
-                      _summaryCard(
-                        'Person Available',
-                        Icons.groups_outlined,
-                        [
-                          _SummaryRow('JO', '$availableTech'),
-                          _SummaryRow('CF', '$availableHelpers'),
-                        ],
-                        onTap: () => _showAvailablePeople(context, availableTechList, availableHelperList),
-                      ),
-                      _summaryCard('Task Running', Icons.work_history_outlined, [
-                        _SummaryRow('PM', '$pmCount'),
-                        _SummaryRow('BM', '$bmCount'),
-                        _SummaryRow('CL', '$clCount'),
-                        _SummaryRow('AD', '$adCount'),
-                      ]),
+                    final sideBySide = isAndroid || MediaQuery.sizeOf(context).width >= 650;
+                    final jo = _summaryCard(
+                      'Person Available',
+                      Icons.groups_outlined,
+                      [
+                        _SummaryRow('JO', '$availableTech'),
+                        _SummaryRow('CF', '$availableHelpers'),
+                      ],
+                      onTap: () => _showAvailablePeople(context, availableTechList, availableHelperList),
+                    );
+                    final task = _summaryCard('Task Running', Icons.work_history_outlined, [
+                      _SummaryRow('PM', '$pmCount'),
+                      _SummaryRow('BM', '$bmCount'),
+                      _SummaryRow('CL', '$clCount'),
+                      _SummaryRow('AD', '$adCount'),
                     ]);
+                    if (!sideBySide) {
+                      return Column(children: [jo, const SizedBox(height: 12), task]);
+                    }
+                    // IntrinsicHeight makes both cards match the taller one's
+                    // height without needing a hardcoded aspect ratio — a
+                    // fixed ratio broke as soon as one card had more rows
+                    // than the other and caused a bottom overflow.
+                    return IntrinsicHeight(
+                      child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                        Expanded(child: jo),
+                        const SizedBox(width: 12),
+                        Expanded(child: task),
+                      ]),
+                    );
                   }),
                   const SizedBox(height: 18),
                   const Text('Running Task', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),

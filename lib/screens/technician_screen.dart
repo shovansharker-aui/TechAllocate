@@ -5,6 +5,7 @@ import '../models/helper.dart';
 import '../models/machine.dart';
 import '../models/work_order.dart';
 import '../widgets_root_back_scope.dart';
+import '../utils/task_type.dart';
 import 'assign_helper_task_screen.dart';
 
 class TechnicianScreen extends StatelessWidget {
@@ -276,7 +277,7 @@ class _StartTaskPageState extends State<_StartTaskPage> {
         const Text('Maintenance Type', style: TextStyle(fontWeight: FontWeight.w600)),
         const SizedBox(height: 8),
         Wrap(spacing: 8, runSpacing: 8, children: [
-          _typeChip('preventive', 'PM · Preventive'), _typeChip('breakdown', 'BM · Breakdown'), _typeChip('calibration', 'CL · Calibration'), _typeChip('adjustment', 'AD · Adjustment'),
+          _typeChip('preventive', taskTypeCodeAndName('preventive')), _typeChip('breakdown', taskTypeCodeAndName('breakdown')), _typeChip('calibration', taskTypeCodeAndName('calibration')), _typeChip('adjustment', taskTypeCodeAndName('adjustment')),
         ]),
         if (_type == 'preventive') ...[
           const SizedBox(height: 14),
@@ -349,15 +350,7 @@ class _CurrentTaskView extends StatefulWidget {
 class _CurrentTaskViewState extends State<_CurrentTaskView> {
   bool _isCompleting = false;
 
-  String _typeCode(WorkOrder order) {
-    switch (order.type) {
-      case 'preventive': return 'PM';
-      case 'breakdown': return 'BM';
-      case 'calibration': return 'CL';
-      case 'adjustment': return 'AD';
-      default: return order.type.toUpperCase();
-    }
-  }
+  String _typeCode(WorkOrder order) => taskTypeCode(order.type);
 
   Future<void> _chooseAndAddHelpers(WorkOrder order) async {
     final snap = await FirebaseFirestore.instance.collection('helpers').orderBy('name').get();
