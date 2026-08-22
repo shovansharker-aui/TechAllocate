@@ -12,10 +12,13 @@ class MainActivity : FlutterActivity() {
         super.configureFlutterEngine(flutterEngine)
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, channelName).setMethodCallHandler { call, result ->
             if (call.method == "updateStatus") {
-                val maintenance = call.argument<Int>("maintenanceOngoing") ?: 0
-                val engaged = call.argument<Int>("personEngaged") ?: 0
-                val free = call.argument<Int>("personFree") ?: 0
-                TechAllocateWidgetProvider.updateAll(this, maintenance, engaged, free)
+                val jo = call.argument<Int>("jo") ?: 0
+                val cf = call.argument<Int>("cf") ?: 0
+                val pm = call.argument<Int>("pm") ?: 0
+                val bm = call.argument<Int>("bm") ?: 0
+                val cl = call.argument<Int>("cl") ?: 0
+                val ad = call.argument<Int>("ad") ?: 0
+                TechAllocateWidgetProvider.updateAll(this, jo, cf, pm, bm, cl, ad)
                 result.success(null)
             } else {
                 result.notImplemented()

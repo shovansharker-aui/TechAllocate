@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:minWidth="180dp"
-    android:minHeight="120dp"
+    android:minHeight="140dp"
     android:minResizeWidth="160dp"
-    android:minResizeHeight="100dp"
+    android:minResizeHeight="120dp"
     android:updatePeriodMillis="1800000"
     android:initialLayout="@layout/techallocate_widget"
     android:resizeMode="horizontal|vertical"

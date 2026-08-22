@@ -4,13 +4,25 @@ import 'package:flutter/services.dart';
 class AndroidWidgetService {
   static const MethodChannel _channel = MethodChannel('techallocate/widget');
 
-  static Future<void> update({required int maintenanceOngoing, required int personEngaged, required int personFree}) async {
+  /// Mirrors the two summary cards on the admin dashboard:
+  /// "Person Available" (JO, CF) and "Task Running" (PM, BM, CL, AD).
+  static Future<void> update({
+    required int jo,
+    required int cf,
+    required int pm,
+    required int bm,
+    required int cl,
+    required int ad,
+  }) async {
     if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) return;
     try {
       await _channel.invokeMethod('updateStatus', {
-        'maintenanceOngoing': maintenanceOngoing,
-        'personEngaged': personEngaged,
-        'personFree': personFree,
+        'jo': jo,
+        'cf': cf,
+        'pm': pm,
+        'bm': bm,
+        'cl': cl,
+        'ad': ad,
       });
     } catch (_) {
       // Widget is optional; never let widget problems interrupt the app.

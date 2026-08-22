@@ -9,15 +9,21 @@ import android.widget.RemoteViews
 class TechAllocateWidgetProvider : AppWidgetProvider() {
     companion object {
         private const val PREFS = "techallocate_widget"
-        private const val MAINTENANCE = "maintenanceOngoing"
-        private const val ENGAGED = "personEngaged"
-        private const val FREE = "personFree"
+        private const val JO = "jo"
+        private const val CF = "cf"
+        private const val PM = "pm"
+        private const val BM = "bm"
+        private const val CL = "cl"
+        private const val AD = "ad"
 
-        fun updateAll(context: Context, maintenance: Int, engaged: Int, free: Int) {
+        fun updateAll(context: Context, jo: Int, cf: Int, pm: Int, bm: Int, cl: Int, ad: Int) {
             context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit()
-                .putInt(MAINTENANCE, maintenance)
-                .putInt(ENGAGED, engaged)
-                .putInt(FREE, free)
+                .putInt(JO, jo)
+                .putInt(CF, cf)
+                .putInt(PM, pm)
+                .putInt(BM, bm)
+                .putInt(CL, cl)
+                .putInt(AD, ad)
                 .apply()
 
             val manager = AppWidgetManager.getInstance(context)
@@ -29,9 +35,17 @@ class TechAllocateWidgetProvider : AppWidgetProvider() {
         private fun updateOne(context: Context, manager: AppWidgetManager, widgetId: Int) {
             val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
             val views = RemoteViews(context.packageName, R.layout.techallocate_widget)
-            views.setTextViewText(R.id.widget_maintenance, "Maintenance Ongoing: ${prefs.getInt(MAINTENANCE, 0)}")
-            views.setTextViewText(R.id.widget_engaged, "Person Engaged: ${prefs.getInt(ENGAGED, 0)}")
-            views.setTextViewText(R.id.widget_free, "Person Free: ${prefs.getInt(FREE, 0)}")
+
+            // "Person Available" card
+            views.setTextViewText(R.id.widget_jo, "JO - ${prefs.getInt(JO, 0)}")
+            views.setTextViewText(R.id.widget_cf, "CF - ${prefs.getInt(CF, 0)}")
+
+            // "Task Running" card
+            views.setTextViewText(R.id.widget_pm, "PM - ${prefs.getInt(PM, 0)}")
+            views.setTextViewText(R.id.widget_bm, "BM - ${prefs.getInt(BM, 0)}")
+            views.setTextViewText(R.id.widget_cl, "CL - ${prefs.getInt(CL, 0)}")
+            views.setTextViewText(R.id.widget_ad, "AD - ${prefs.getInt(AD, 0)}")
+
             manager.updateAppWidget(widgetId, views)
         }
     }

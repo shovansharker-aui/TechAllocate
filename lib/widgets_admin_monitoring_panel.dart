@@ -24,8 +24,6 @@ class AdminMonitoringPanel extends StatelessWidget {
                 final techs = techSnapshot.data?.docs ?? [];
                 final helpers = helperSnapshot.data?.docs ?? [];
                 final orders = orderSnapshot.data?.docs ?? [];
-                final busyTech = techs.where((d) => d.data()['status'] == 'assigned').length;
-                final busyHelpers = helpers.where((d) => d.data()['status'] == 'assigned').length;
                 final availableTechList = techs
                     .map((d) => AppUser.fromMap(d.id, d.data()))
                     .where((t) => t.status != 'assigned' && t.dutyStatus != 'on_leave')
@@ -36,8 +34,6 @@ class AdminMonitoringPanel extends StatelessWidget {
                     .toList();
                 final availableTech = availableTechList.length;
                 final availableHelpers = availableHelperList.length;
-                final engaged = busyTech + busyHelpers;
-                final free = (techs.length + helpers.length) - engaged - techs.where((d) => d.data()['dutyStatus'] == 'on_leave').length;
                 int countType(String type) => orders.where((d) => (d.data()['type'] ?? '') == type).length;
                 final pmCount = countType('preventive');
                 final bmCount = countType('breakdown');
@@ -45,9 +41,12 @@ class AdminMonitoringPanel extends StatelessWidget {
                 final adCount = countType('adjustment');
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   AndroidWidgetService.update(
-                    maintenanceOngoing: orders.length,
-                    personEngaged: engaged,
-                    personFree: free < 0 ? 0 : free,
+                    jo: availableTech,
+                    cf: availableHelpers,
+                    pm: pmCount,
+                    bm: bmCount,
+                    cl: clCount,
+                    ad: adCount,
                   );
                 });
                 return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
