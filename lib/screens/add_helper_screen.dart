@@ -131,7 +131,7 @@ class _AddHelperScreenState extends State<AddHelperScreen> {
                       margin: const EdgeInsets.only(bottom: 14),
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.red.withOpacity(.08),
+                        color: Colors.red.withValues(alpha: .08),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(_error!, style: const TextStyle(color: Colors.red)),

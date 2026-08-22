@@ -551,7 +551,7 @@ class _CurrentTaskViewState extends State<_CurrentTaskView> {
                   },
                 ),
                 const SizedBox(height: 18),
-                if (order.type != 'preventive') Container(padding: const EdgeInsets.all(12), decoration: BoxDecoration(color: Colors.orange.withOpacity(.08), borderRadius: BorderRadius.circular(10)), child: const Text('Completion remarks are required for Breakdown, Calibration and Adjustment tasks.')),
+                if (order.type != 'preventive') Container(padding: const EdgeInsets.all(12), decoration: BoxDecoration(color: Colors.orange.withValues(alpha: .08), borderRadius: BorderRadius.circular(10)), child: const Text('Completion remarks are required for Breakdown, Calibration and Adjustment tasks.')),
               ])),
               SizedBox(width: double.infinity, height: 50, child: FilledButton.icon(style: FilledButton.styleFrom(backgroundColor: Colors.green, foregroundColor: Colors.white), onPressed: _isCompleting ? null : () => _confirmAndComplete(order), icon: const Icon(Icons.check_circle_outline), label: _isCompleting ? const CircularProgressIndicator(strokeWidth: 2) : const Text('Complete Task'))),
             ]));
