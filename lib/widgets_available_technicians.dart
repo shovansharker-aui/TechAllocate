@@ -25,10 +25,10 @@ class AvailableTechnicians extends StatelessWidget {
     return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
       stream: FirebaseFirestore.instance.collection('users').where('role', isEqualTo: 'technician').snapshots(),
       builder: (context, snapshot) {
-        if (snapshot.hasError) return Text('Unable to load technicians: ${snapshot.error}');
+        if (snapshot.hasError) return Text('Unable to load Junior Officers: ${snapshot.error}');
         final techs = (snapshot.data?.docs ?? []).map((d) => AppUser.fromMap(d.id, d.data())).where((t) => t.status != 'assigned' && t.dutyStatus != 'on_leave').toList();
         techs.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
-        if (techs.isEmpty) return const Card(child: Padding(padding: EdgeInsets.all(16), child: Text('No technician is currently available.')));
+        if (techs.isEmpty) return const Card(child: Padding(padding: EdgeInsets.all(16), child: Text('No Junior Officer is currently available.')));
         return Card(child: Column(children: techs.map((tech) => ListTile(
           leading: CircleAvatar(child: Text(tech.name.isEmpty ? '?' : tech.name[0].toUpperCase())),
           title: Text(tech.name),

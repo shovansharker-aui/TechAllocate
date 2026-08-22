@@ -120,7 +120,7 @@ class _LiveActivityGridState extends State<LiveActivityGrid> {
                                       ],
                                     ),
                                     const SizedBox(height: 8),
-                                    _peopleRow(context, Icons.engineering_outlined, technicianNames, 'No technician'),
+                                    _peopleRow(context, Icons.engineering_outlined, technicianNames, 'No JO'),
                                     if (helperNames.isNotEmpty) ...[
                                       const SizedBox(height: 4),
                                       _peopleRow(context, Icons.handyman_outlined, helperNames, ''),

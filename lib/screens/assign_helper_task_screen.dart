@@ -98,14 +98,14 @@ class _AssignHelperTaskScreenState extends State<AssignHelperTaskScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const Text(
-                      'Select Helpers',
+                      'Select CFs',
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 8),
                     if (available.isEmpty)
                       const Padding(
                         padding: EdgeInsets.all(20),
-                        child: Text('No available helpers right now.'),
+                        child: Text('No available CFs right now.'),
                       )
                     else
                       ConstrainedBox(
@@ -163,7 +163,7 @@ class _AssignHelperTaskScreenState extends State<AssignHelperTaskScreen> {
       return;
     }
     if (_selectedHelperIds.isEmpty) {
-      setState(() => _errorText = 'Select at least one helper.');
+      setState(() => _errorText = 'Select at least one CF.');
       return;
     }
     if (_type == 'preventive' && _preventiveTypes.isEmpty) {
@@ -202,13 +202,13 @@ class _AssignHelperTaskScreenState extends State<AssignHelperTaskScreen> {
       await batch.commit();
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Helper assignment started. You remain available.')),
+        const SnackBar(content: Text('CF assignment started. You remain available.')),
       );
       Navigator.pop(context);
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _errorText = 'Failed to assign helper: $e';
+        _errorText = 'Failed to assign CF: $e';
         _isSaving = false;
       });
     }
@@ -218,7 +218,7 @@ class _AssignHelperTaskScreenState extends State<AssignHelperTaskScreen> {
   Widget build(BuildContext context) {
     return RootBackScope(
       child: Scaffold(
-        appBar: AppBar(title: const Text('Assign a Helper')),
+        appBar: AppBar(title: const Text('Assign a CF')),
         body: ListView(
           padding: const EdgeInsets.all(20),
           children: [
@@ -231,7 +231,7 @@ class _AssignHelperTaskScreenState extends State<AssignHelperTaskScreen> {
                     SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        'This creates a task for the selected helper(s). The technician assigning them remains available.',
+                        'This creates a task for the selected CF(s). The Junior Officer assigning them remains available.',
                       ),
                     ),
                   ],
@@ -357,13 +357,13 @@ class _AssignHelperTaskScreenState extends State<AssignHelperTaskScreen> {
               ),
             ],
             const SizedBox(height: 18),
-            const Text('Assign Helper(s)', style: TextStyle(fontWeight: FontWeight.w600)),
+            const Text('Assign CF(s)', style: TextStyle(fontWeight: FontWeight.w600)),
             const SizedBox(height: 6),
             StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
               stream: _helpersStream,
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
-                  return Text('Unable to load helpers: ${snapshot.error}');
+                  return Text('Unable to load CFs: ${snapshot.error}');
                 }
                 final helpers = snapshot.data?.docs
                         .map((d) => Helper.fromMap(d.id, d.data()))
@@ -380,8 +380,8 @@ class _AssignHelperTaskScreenState extends State<AssignHelperTaskScreen> {
                       icon: const Icon(Icons.group_add_outlined),
                       label: Text(
                         selected.isEmpty
-                            ? 'Select helper(s)'
-                            : 'Change helper(s) · ${selected.length}',
+                            ? 'Select CF(s)'
+                            : 'Change CF(s) · ${selected.length}',
                       ),
                     ),
                     if (selected.isNotEmpty)
@@ -425,7 +425,7 @@ class _AssignHelperTaskScreenState extends State<AssignHelperTaskScreen> {
                 icon: const Icon(Icons.person_add_alt_1),
                 label: _isSaving
                     ? const CircularProgressIndicator(strokeWidth: 2)
-                    : const Text('Assign Helper & Start Task'),
+                    : const Text('Assign CF & Start Task'),
               ),
             ),
           ],

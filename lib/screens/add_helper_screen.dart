@@ -40,7 +40,7 @@ class _AddHelperScreenState extends State<AddHelperScreen> {
 
       if (existing.docs.isNotEmpty) {
         setState(() {
-          _error = 'This helper Employee ID already exists.';
+          _error = 'This CF Employee ID already exists.';
           _saving = false;
         });
         return;
@@ -56,19 +56,19 @@ class _AddHelperScreenState extends State<AddHelperScreen> {
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Helper added successfully.')),
+        const SnackBar(content: Text('CF added successfully.')),
       );
       Navigator.of(context).pop();
     } on FirebaseException catch (e) {
       if (!mounted) return;
       setState(() {
-        _error = 'Failed to add helper: ${e.message ?? e.code}';
+        _error = 'Failed to add CF: ${e.message ?? e.code}';
         _saving = false;
       });
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _error = 'Failed to add helper: $e';
+        _error = 'Failed to add CF: $e';
         _saving = false;
       });
     }
@@ -82,13 +82,13 @@ class _AddHelperScreenState extends State<AddHelperScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Helper')),
+      appBar: AppBar(title: const Text('Add CF')),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(20),
           children: [
             const Text(
-              'Helper Information',
+              'CF Information',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 18),
@@ -120,7 +120,7 @@ class _AddHelperScreenState extends State<AddHelperScreen> {
                   const Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Helpers do not log in to TechAllocate. They are only attached to a technician\'s active task.',
+                      'CFs do not log in to TechAllocate. They are only attached to a Junior Officer\'s active task.',
                       style: TextStyle(color: Colors.grey),
                     ),
                   ),
@@ -147,7 +147,7 @@ class _AddHelperScreenState extends State<AddHelperScreen> {
                               height: 20,
                               child: CircularProgressIndicator(strokeWidth: 2),
                             )
-                          : const Text('Add Helper'),
+                          : const Text('Add CF'),
                     ),
                   ),
                 ],
@@ -155,7 +155,7 @@ class _AddHelperScreenState extends State<AddHelperScreen> {
             ),
             const SizedBox(height: 28),
             const Text(
-              'Existing Helpers',
+              'Existing CFs',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
@@ -165,12 +165,12 @@ class _AddHelperScreenState extends State<AddHelperScreen> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const LinearProgressIndicator();
                 }
-                if (snapshot.hasError) return Text('Unable to load helpers: ${snapshot.error}');
+                if (snapshot.hasError) return Text('Unable to load CFs: ${snapshot.error}');
                 final helpers = snapshot.data?.docs
                         .map((d) => Helper.fromMap(d.id, d.data()))
                         .toList() ??
                     [];
-                if (helpers.isEmpty) return const Text('No helpers added yet.');
+                if (helpers.isEmpty) return const Text('No CFs added yet.');
                 return Column(
                   children: helpers
                       .map(
@@ -178,8 +178,7 @@ class _AddHelperScreenState extends State<AddHelperScreen> {
                           child: ListTile(
                             leading: CircleAvatar(child: Text(h.name.isEmpty ? '?' : h.name[0].toUpperCase())),
                             title: Text(h.name),
-                            subtitle: Text(h.employeeId),
-                            trailing: Text(h.status == 'assigned' ? 'With technician' : 'Available'),
+                            trailing: Text(h.status == 'assigned' ? 'With JO' : 'Available'),
                           ),
                         ),
                       )

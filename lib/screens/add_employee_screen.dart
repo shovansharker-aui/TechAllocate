@@ -171,7 +171,7 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                 ),
                 const SizedBox(height: 12),
                 const Text(
-                  'New employees are created as technicians.',
+                  'New employees are created as Junior Officers.',
                   style: TextStyle(color: Colors.grey),
                 ),
                 const SizedBox(height: 18),

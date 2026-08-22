@@ -5,6 +5,7 @@ import '../models/helper.dart';
 import '../models/machine.dart';
 import '../models/work_order.dart';
 import '../widgets_root_back_scope.dart';
+import 'assign_helper_task_screen.dart';
 
 class TechnicianScreen extends StatelessWidget {
   final AppUser user;
@@ -55,7 +56,7 @@ class TechnicianScreen extends StatelessWidget {
     return RootBackScope(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Technician Dashboard'),
+          title: const Text('Junior Officer Dashboard'),
           actions: [
             IconButton(icon: const Icon(Icons.toggle_on_outlined), tooltip: 'Set Status', onPressed: () => _setDutyStatus(context)),
             IconButton(icon: const Icon(Icons.logout), tooltip: 'Log out', onPressed: onLogout),
@@ -89,10 +90,21 @@ class _TechnicianHome extends StatelessWidget {
           child: ListTile(
             leading: const CircleAvatar(child: Icon(Icons.play_arrow)),
             title: const Text('Start a task', style: TextStyle(fontWeight: FontWeight.bold)),
-            subtitle: Text(onLeave ? 'Unavailable while on-leave.' : 'Select a machine, maintenance type and optional helpers.'),
+            subtitle: Text(onLeave ? 'Unavailable while on-leave.' : 'Select a machine, maintenance type and optional CFs.'),
             trailing: const Icon(Icons.chevron_right),
             enabled: !onLeave,
             onTap: onLeave ? null : () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => _StartTaskPage(uid: uid))),
+          ),
+        ),
+        const SizedBox(height: 12),
+        Card(
+          child: ListTile(
+            leading: const CircleAvatar(child: Icon(Icons.person_add_alt_1)),
+            title: const Text('Assign a CF', style: TextStyle(fontWeight: FontWeight.bold)),
+            subtitle: Text(onLeave ? 'Unavailable while on-leave.' : 'Send a CF to a machine/task. You stay available.'),
+            trailing: const Icon(Icons.chevron_right),
+            enabled: !onLeave,
+            onTap: onLeave ? null : () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => AssignHelperTaskScreen(uid: uid))),
           ),
         ),
         const SizedBox(height: 12),
@@ -184,9 +196,9 @@ class _StartTaskPageState extends State<_StartTaskPage> {
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
           child: Column(mainAxisSize: MainAxisSize.min, children: [
-            const Text('Select Helpers', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const Text('Select CFs', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
-            if (available.isEmpty) const Padding(padding: EdgeInsets.all(20), child: Text('No available helpers right now.'))
+            if (available.isEmpty) const Padding(padding: EdgeInsets.all(20), child: Text('No available CFs right now.'))
             else ConstrainedBox(
               constraints: const BoxConstraints(maxHeight: 420),
               child: ListView(shrinkWrap: true, children: available.map((h) => CheckboxListTile(
@@ -291,14 +303,14 @@ class _StartTaskPageState extends State<_StartTaskPage> {
           ),
         ],
         const SizedBox(height: 18),
-        const Text('Helpers (optional)', style: TextStyle(fontWeight: FontWeight.w600)),
+        const Text('CFs (optional)', style: TextStyle(fontWeight: FontWeight.w600)),
         const SizedBox(height: 6),
         StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(stream: _helpersStream, builder: (context, snapshot) {
-          if (snapshot.hasError) return Text('Unable to load helpers: ${snapshot.error}');
+          if (snapshot.hasError) return Text('Unable to load CFs: ${snapshot.error}');
           final helpers = snapshot.data?.docs.map((d) => Helper.fromMap(d.id, d.data())).toList() ?? [];
           final selected = helpers.where((h) => _selectedHelperIds.contains(h.uid)).toList();
           return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            OutlinedButton.icon(onPressed: () => _chooseHelpers(helpers), icon: const Icon(Icons.group_add_outlined), label: Text(selected.isEmpty ? 'Select helper(s)' : 'Change helper(s) · ${selected.length}')),
+            OutlinedButton.icon(onPressed: () => _chooseHelpers(helpers), icon: const Icon(Icons.group_add_outlined), label: Text(selected.isEmpty ? 'Select CF(s)' : 'Change CF(s) · ${selected.length}')),
             if (selected.isNotEmpty)
               Wrap(
                 spacing: 6,
@@ -337,13 +349,13 @@ class _CurrentTaskView extends StatefulWidget {
 class _CurrentTaskViewState extends State<_CurrentTaskView> {
   bool _isCompleting = false;
 
-  String _typeLabel(WorkOrder order) {
+  String _typeCode(WorkOrder order) {
     switch (order.type) {
-      case 'preventive': return 'PM · Preventive${order.preventiveTypes.isEmpty ? '' : ' · ${order.preventiveTypes.join(', ')}'}';
-      case 'breakdown': return 'BM · Breakdown';
-      case 'calibration': return 'CL · Calibration';
-      case 'adjustment': return 'AD · Adjustment';
-      default: return order.type;
+      case 'preventive': return 'PM';
+      case 'breakdown': return 'BM';
+      case 'calibration': return 'CL';
+      case 'adjustment': return 'AD';
+      default: return order.type.toUpperCase();
     }
   }
 
@@ -355,7 +367,7 @@ class _CurrentTaskViewState extends State<_CurrentTaskView> {
     await showModalBottomSheet<void>(context: context, isScrollControlled: true, builder: (sheetContext) => StatefulBuilder(builder: (context, setSheetState) => SafeArea(child: Padding(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
       child: Column(mainAxisSize: MainAxisSize.min, children: [
-        const Text('Add / Manage Helpers', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        const Text('Add / Manage CFs', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
         ConstrainedBox(
           constraints: const BoxConstraints(maxHeight: 420),
@@ -390,8 +402,8 @@ class _CurrentTaskViewState extends State<_CurrentTaskView> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('Release all helpers?'),
-        content: Text('This will release all ${order.helperIds.length} helper(s) from this task.'),
+        title: const Text('Release all CFs?'),
+        content: Text('This will release all ${order.helperIds.length} CF(s) from this task.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: const Text('Cancel')),
           FilledButton(onPressed: () => Navigator.pop(dialogContext, true), child: const Text('Release all')),
@@ -412,9 +424,9 @@ class _CurrentTaskViewState extends State<_CurrentTaskView> {
         await firestore.runTransaction((tx) async {
           final ref = firestore.collection('helpers').doc(id);
           final snap = await tx.get(ref);
-          if (!snap.exists) throw Exception('Helper not found.');
+          if (!snap.exists) throw Exception('CF not found.');
           final data = snap.data()!;
-          if ((data['status'] ?? 'available') != 'available') throw Exception('${data['name'] ?? 'Helper'} is no longer available.');
+          if ((data['status'] ?? 'available') != 'available') throw Exception('${data['name'] ?? 'CF'} is no longer available.');
           tx.update(ref, {'status': 'assigned', 'currentTaskId': widget.taskId});
           tx.update(firestore.collection('work_orders').doc(widget.taskId), {'helperIds': FieldValue.arrayUnion([id])});
         });
@@ -426,7 +438,7 @@ class _CurrentTaskViewState extends State<_CurrentTaskView> {
         await batch.commit();
       }
     } catch (e) {
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Could not update helpers: $e')));
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Could not update CFs: $e')));
     }
   }
 
@@ -493,14 +505,17 @@ class _CurrentTaskViewState extends State<_CurrentTaskView> {
               Expanded(child: ListView(children: [
                 const Text('Task Running', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 18),
-                Text('Machine: ${machine?.equipmentName ?? order.machineId}', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-                if (machine?.equipmentId.isNotEmpty == true) Text('Equipment ID: ${machine!.equipmentId}'),
-                const SizedBox(height: 8),
-                Text('Type: ${_typeLabel(order)}'),
+                Row(children: [
+                  CircleAvatar(radius: 16, child: Text(_typeCode(order), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold))),
+                  const SizedBox(width: 10),
+                  Expanded(child: Text('Machine: ${machine?.equipmentName ?? order.machineId}', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600))),
+                ]),
+                if (machine?.equipmentId.isNotEmpty == true) Padding(padding: const EdgeInsets.only(top: 4), child: Text('Equipment ID: ${machine!.equipmentId}')),
+                if (order.type == 'preventive' && order.preventiveTypes.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 4), child: Text('Preventive type: ${order.preventiveTypes.join(', ')}')),
                 if (order.description.isNotEmpty) ...[const SizedBox(height: 8), Text('Starting remarks: ${order.description}')],
                 const SizedBox(height: 18),
                 Row(children: [
-                  const Expanded(child: Text('Helpers', style: TextStyle(fontWeight: FontWeight.w600))),
+                  const Expanded(child: Text('CFs', style: TextStyle(fontWeight: FontWeight.w600))),
                   if (order.helperIds.isNotEmpty)
                     TextButton.icon(
                       onPressed: () => _confirmReleaseAllHelpers(order),
@@ -508,14 +523,14 @@ class _CurrentTaskViewState extends State<_CurrentTaskView> {
                       label: const Text('Release all'),
                       style: TextButton.styleFrom(foregroundColor: Colors.red),
                     ),
-                  OutlinedButton.icon(onPressed: () => _chooseAndAddHelpers(order), icon: const Icon(Icons.person_add_alt_1), label: const Text('Add helper')),
+                  OutlinedButton.icon(onPressed: () => _chooseAndAddHelpers(order), icon: const Icon(Icons.person_add_alt_1), label: const Text('Add CF')),
                 ]),
                 const SizedBox(height: 4),
                 StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                   stream: order.helperIds.isEmpty ? null : FirebaseFirestore.instance.collection('helpers').where(FieldPath.documentId, whereIn: order.helperIds).snapshots(),
                   builder: (context, helperSnapshot) {
                     final docs = helperSnapshot.data?.docs ?? [];
-                    if (docs.isEmpty) return const Text('No helper selected.');
+                    if (docs.isEmpty) return const Text('No CF selected.');
                     return Column(
                       children: docs.map((d) {
                         return ListTile(

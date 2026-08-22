@@ -42,15 +42,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Card(child: ListTile(
             leading: const CircleAvatar(child: Icon(Icons.person_add_alt_1_outlined)),
             title: const Text('Add New Employee'),
-            subtitle: const Text('Create a technician account with name, employee ID, phone and PIN.'),
+            subtitle: const Text('Create a Junior Officer account with name, employee ID, phone and PIN.'),
             trailing: const Icon(Icons.chevron_right),
             onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AddEmployeeScreen())),
           )),
           const SizedBox(height: 10),
           Card(child: ListTile(
             leading: const CircleAvatar(child: Icon(Icons.handyman_outlined)),
-            title: const Text('Helpers'),
-            subtitle: const Text('Add helpers who can accompany technicians without using the app.'),
+            title: const Text('CFs'),
+            subtitle: const Text('Add CFs who can accompany Junior Officers without using the app.'),
             trailing: const Icon(Icons.chevron_right),
             onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AddHelperScreen())),
           )),

@@ -43,7 +43,7 @@ class AdminWebSettingsScreen extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.w600),
                   ),
                   subtitle: const Text(
-                    'Create a technician account with name, employee ID, phone and PIN.',
+                    'Create a Junior Officer account with name, employee ID, phone and PIN.',
                   ),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => _open(context, const AddEmployeeScreen()),
@@ -57,11 +57,11 @@ class AdminWebSettingsScreen extends StatelessWidget {
                     child: Icon(Icons.handyman_outlined),
                   ),
                   title: const Text(
-                    'Helpers',
+                    'CFs',
                     style: TextStyle(fontWeight: FontWeight.w600),
                   ),
                   subtitle: const Text(
-                    'Add helpers who can accompany technicians without using the app.',
+                    'Add CFs who can accompany Junior Officers without using the app.',
                   ),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => _open(context, const AddHelperScreen()),

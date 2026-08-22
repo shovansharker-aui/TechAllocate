@@ -14,6 +14,71 @@ class CompletedTasksScreen extends StatefulWidget {
 
 class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
   DateTime _month = DateTime(DateTime.now().year, DateTime.now().month);
+  bool _isClearing = false;
+
+  String _monthLabel(DateTime month) {
+    const names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    return '${names[month.month - 1]} ${month.year}';
+  }
+
+  Future<void> _confirmClearMonth(DateTime monthStart, DateTime monthEnd) async {
+    final query = FirebaseFirestore.instance
+        .collection('work_orders')
+        .where('status', isEqualTo: 'completed')
+        .where('completedAt', isGreaterThanOrEqualTo: Timestamp.fromDate(monthStart))
+        .where('completedAt', isLessThan: Timestamp.fromDate(monthEnd));
+
+    final countSnap = await query.count().get();
+    final count = countSnap.count ?? 0;
+
+    if (!mounted) return;
+    if (count == 0) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('No completed tasks in ${_monthLabel(monthStart)}.')));
+      return;
+    }
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text('Clear ${_monthLabel(monthStart)} history?'),
+        content: Text('This will permanently delete $count completed task record(s) from ${_monthLabel(monthStart)}. This cannot be undone.'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: const Text('Cancel')),
+          FilledButton(
+            style: FilledButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+
+    setState(() => _isClearing = true);
+    try {
+      final firestore = FirebaseFirestore.instance;
+      // Delete in batches of 500 (Firestore's batch write limit).
+      while (true) {
+        final snap = await query.limit(500).get();
+        if (snap.docs.isEmpty) break;
+        final batch = firestore.batch();
+        for (final doc in snap.docs) {
+          batch.delete(doc.reference);
+        }
+        await batch.commit();
+        if (snap.docs.length < 500) break;
+      }
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Cleared $count task(s) from ${_monthLabel(monthStart)}.')));
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to clear history: $e')));
+      }
+    } finally {
+      if (mounted) setState(() => _isClearing = false);
+    }
+  }
 
   String _formatDate(DateTime? value) {
     if (value == null) return 'Unknown time';
@@ -46,6 +111,13 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
       default:
         return order.type.toUpperCase();
     }
+  }
+
+  String _typeDetail(WorkOrder order) {
+    if (order.type == 'preventive' && order.preventiveTypes.isNotEmpty) {
+      return order.preventiveTypes.join(', ');
+    }
+    return '';
   }
 
   Future<List<AppUser>> _users() async {
@@ -100,11 +172,15 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                   child: ExpansionTile(
                     leading: CircleAvatar(child: Text(_type(order).split(' ').first)),
                     title: Text(machine?.equipmentName ?? order.machineId, maxLines: 1, overflow: TextOverflow.ellipsis),
-                    subtitle: Text('${_type(order)} · ${_formatDate(order.completedAt)} · ${_duration(order.durationSeconds)}'),
+                    subtitle: Text([
+                      if (_typeDetail(order).isNotEmpty) _typeDetail(order),
+                      _formatDate(order.completedAt),
+                      _duration(order.durationSeconds),
+                    ].join(' · ')),
                     childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 14),
                     children: [
-                      if (techNames.isNotEmpty) ListTile(dense: true, leading: const Icon(Icons.engineering_outlined), title: Text('Technician: ${techNames.join(', ')}')),
-                      if (helperNames.isNotEmpty) ListTile(dense: true, leading: const Icon(Icons.handyman_outlined), title: Text('Helpers: ${helperNames.join(', ')}')),
+                      if (techNames.isNotEmpty) ListTile(dense: true, leading: const Icon(Icons.engineering_outlined), title: Text('JO: ${techNames.join(', ')}')),
+                      if (helperNames.isNotEmpty) ListTile(dense: true, leading: const Icon(Icons.handyman_outlined), title: Text('CF: ${helperNames.join(', ')}')),
                       if (machine?.equipmentId.isNotEmpty == true) ListTile(dense: true, leading: const Icon(Icons.badge_outlined), title: Text('Equipment: ${machine!.equipmentId}')),
                       if (order.description.isNotEmpty) ListTile(dense: true, leading: const Icon(Icons.notes_outlined), title: Text('Start remarks: ${order.description}')),
                       if (order.completionRemarks.isNotEmpty) ListTile(dense: true, leading: const Icon(Icons.check_circle_outline), title: Text('Completion remarks: ${order.completionRemarks}')),
@@ -140,6 +216,18 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
               Text('${_month.year}-${_month.month.toString().padLeft(2, '0')}'),
               IconButton(onPressed: () => setState(() => _month = DateTime(_month.year, _month.month + 1)), icon: const Icon(Icons.chevron_right)),
             ],
+          ),
+          const SizedBox(height: 4),
+          Align(
+            alignment: Alignment.centerRight,
+            child: TextButton.icon(
+              onPressed: _isClearing ? null : () => _confirmClearMonth(monthStart, monthEnd),
+              icon: _isClearing
+                  ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                  : const Icon(Icons.delete_outline, size: 18),
+              label: Text('Clear ${_monthLabel(monthStart)} history'),
+              style: TextButton.styleFrom(foregroundColor: Colors.red),
+            ),
           ),
           const SizedBox(height: 8),
           _taskList(start: monthStart, end: monthEnd),
