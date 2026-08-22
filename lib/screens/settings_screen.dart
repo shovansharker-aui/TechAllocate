@@ -4,6 +4,7 @@ import '../services/communication_service.dart';
 import 'add_employee_screen.dart';
 import 'machines_screen.dart';
 import 'add_helper_screen.dart';
+import '../utils/app_colors.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -76,7 +77,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onChanged: (value) { if (value != null) _setWhatsApp(value); },
             ),
           )),
-          if (kIsWeb) const Padding(padding: EdgeInsets.only(top: 8), child: Text('This preference is primarily used by the Android app.', style: TextStyle(color: Colors.grey))),
+          if (kIsWeb) const Padding(padding: EdgeInsets.only(top: 8), child: Text('This preference is primarily used by the Android app.', style: TextStyle(color: AppColors.muted))),
         ],
       ),
     );

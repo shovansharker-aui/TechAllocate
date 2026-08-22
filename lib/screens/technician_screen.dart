@@ -7,6 +7,7 @@ import '../models/work_order.dart';
 import '../widgets_root_back_scope.dart';
 import '../utils/task_type.dart';
 import 'assign_helper_task_screen.dart';
+import '../utils/app_colors.dart';
 
 class TechnicianScreen extends StatelessWidget {
   final AppUser user;
@@ -85,7 +86,7 @@ class _TechnicianHome extends StatelessWidget {
       children: [
         Text('Hello, ${user.name}', style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
-        Text('Status: ${_dutyLabel(user.dutyStatus)}', style: TextStyle(color: onLeave ? Colors.red : Colors.green, fontWeight: FontWeight.w600)),
+        Text('Status: ${_dutyLabel(user.dutyStatus)}', style: TextStyle(color: onLeave ? AppColors.danger : AppColors.success, fontWeight: FontWeight.w600)),
         const SizedBox(height: 24),
         Card(
           child: ListTile(
@@ -330,7 +331,7 @@ class _StartTaskPageState extends State<_StartTaskPage> {
         const SizedBox(height: 6),
         TextField(controller: _remarksController, maxLines: 3, decoration: const InputDecoration(border: OutlineInputBorder(), hintText: 'Optional issue/background information')), 
         const SizedBox(height: 18),
-        if (_errorText != null) Padding(padding: const EdgeInsets.only(bottom: 12), child: Text(_errorText!, style: const TextStyle(color: Colors.red))),
+        if (_errorText != null) Padding(padding: const EdgeInsets.only(bottom: 12), child: Text(_errorText!, style: const TextStyle(color: AppColors.danger))),
         SizedBox(height: 50, child: FilledButton(onPressed: _isSaving ? null : _startTask, child: _isSaving ? const CircularProgressIndicator(strokeWidth: 2) : const Text('Start Task'))),
       ]),
     );
@@ -514,7 +515,7 @@ class _CurrentTaskViewState extends State<_CurrentTaskView> {
                       onPressed: () => _confirmReleaseAllHelpers(order),
                       icon: const Icon(Icons.person_remove_alt_1, size: 18),
                       label: const Text('Release all'),
-                      style: TextButton.styleFrom(foregroundColor: Colors.red),
+                      style: TextButton.styleFrom(foregroundColor: AppColors.danger),
                     ),
                   OutlinedButton.icon(onPressed: () => _chooseAndAddHelpers(order), icon: const Icon(Icons.person_add_alt_1), label: const Text('Add CF')),
                 ]),
@@ -544,9 +545,9 @@ class _CurrentTaskViewState extends State<_CurrentTaskView> {
                   },
                 ),
                 const SizedBox(height: 18),
-                if (order.type != 'preventive') Container(padding: const EdgeInsets.all(12), decoration: BoxDecoration(color: Colors.orange.withValues(alpha: .08), borderRadius: BorderRadius.circular(10)), child: const Text('Completion remarks are required for Breakdown, Calibration and Adjustment tasks.')),
+                if (order.type != 'preventive') Container(padding: const EdgeInsets.all(12), decoration: BoxDecoration(color: AppColors.warning.withValues(alpha: .08), borderRadius: BorderRadius.circular(10)), child: const Text('Completion remarks are required for Breakdown, Calibration and Adjustment tasks.')),
               ])),
-              SizedBox(width: double.infinity, height: 50, child: FilledButton.icon(style: FilledButton.styleFrom(backgroundColor: Colors.green, foregroundColor: Colors.white), onPressed: _isCompleting ? null : () => _confirmAndComplete(order), icon: const Icon(Icons.check_circle_outline), label: _isCompleting ? const CircularProgressIndicator(strokeWidth: 2) : const Text('Complete Task'))),
+              SizedBox(width: double.infinity, height: 50, child: FilledButton.icon(style: FilledButton.styleFrom(backgroundColor: AppColors.success, foregroundColor: Colors.white), onPressed: _isCompleting ? null : () => _confirmAndComplete(order), icon: const Icon(Icons.check_circle_outline), label: _isCompleting ? const CircularProgressIndicator(strokeWidth: 2) : const Text('Complete Task'))),
             ]));
           },
         );

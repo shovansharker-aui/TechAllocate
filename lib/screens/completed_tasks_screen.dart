@@ -5,6 +5,7 @@ import '../models/machine.dart';
 import '../models/work_order.dart';
 import '../models/app_user.dart';
 import '../utils/task_type.dart';
+import '../utils/app_colors.dart';
 
 class CompletedTasksScreen extends StatefulWidget {
   const CompletedTasksScreen({super.key});
@@ -46,7 +47,7 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
         actions: [
           TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: const Text('Cancel')),
           FilledButton(
-            style: FilledButton.styleFrom(backgroundColor: Colors.red),
+            style: FilledButton.styleFrom(backgroundColor: AppColors.danger),
             onPressed: () => Navigator.pop(dialogContext, true),
             child: const Text('Delete'),
           ),
@@ -214,7 +215,7 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
                   ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
                   : const Icon(Icons.delete_outline, size: 18),
               label: Text('Clear ${_monthLabel(monthStart)} history'),
-              style: TextButton.styleFrom(foregroundColor: Colors.red),
+              style: TextButton.styleFrom(foregroundColor: AppColors.danger),
             ),
           ),
           const SizedBox(height: 8),

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../utils/app_colors.dart';
 
 class AddEmployeeScreen extends StatefulWidget {
   const AddEmployeeScreen({super.key});
@@ -172,7 +173,7 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                 const SizedBox(height: 12),
                 const Text(
                   'New employees are created as Junior Officers.',
-                  style: TextStyle(color: Colors.grey),
+                  style: TextStyle(color: AppColors.muted),
                 ),
                 const SizedBox(height: 18),
                 if (_errorText != null)
@@ -181,12 +182,12 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                     margin: const EdgeInsets.only(bottom: 14),
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.red.withValues(alpha: 0.08),
+                      color: AppColors.danger.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
                       _errorText!,
-                      style: const TextStyle(color: Colors.red),
+                      style: const TextStyle(color: AppColors.danger),
                     ),
                   ),
                 SizedBox(

@@ -9,6 +9,7 @@ import 'admin_web_dashboard_screen.dart';
 import 'login_screen.dart';
 import 'technician_screen.dart';
 import '../widgets_root_back_scope.dart';
+import '../utils/app_colors.dart';
 
 class UserSessionGate extends StatelessWidget {
   final String docId;
@@ -108,7 +109,7 @@ class _ErrorScreen extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.error_outline, size: 56, color: Colors.red),
+              const Icon(Icons.error_outline, size: 56, color: AppColors.danger),
               const SizedBox(height: 16),
               Text(message, textAlign: TextAlign.center),
               const SizedBox(height: 16),

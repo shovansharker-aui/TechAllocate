@@ -6,6 +6,7 @@ import 'widgets_completed_tasks_section.dart';
 import 'services/android_widget_service.dart';
 import 'models/app_user.dart';
 import 'models/helper.dart';
+import 'utils/app_colors.dart';
 
 class AdminMonitoringPanel extends StatelessWidget {
   const AdminMonitoringPanel({super.key});
@@ -111,13 +112,13 @@ class AdminMonitoringPanel extends StatelessWidget {
               Icon(icon, size: 20),
               const SizedBox(width: 8),
               Expanded(child: Text(title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
-              if (onTap != null) const Icon(Icons.touch_app_outlined, size: 16, color: Colors.grey),
+              if (onTap != null) const Icon(Icons.touch_app_outlined, size: 16, color: AppColors.muted),
             ]),
             const SizedBox(height: 10),
             ...rows.map((row) => Padding(
               padding: const EdgeInsets.symmetric(vertical: 2),
               child: Row(children: [
-                Text(row.label, style: const TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w600)),
+                Text(row.label, style: const TextStyle(fontSize: 14, color: AppColors.muted, fontWeight: FontWeight.w600)),
                 const SizedBox(width: 8),
                 Text('- ${row.value}', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
               ]),
@@ -157,7 +158,7 @@ class AdminMonitoringPanel extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Junior Officers (${jos.length})', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.grey)),
+                        Text('Junior Officers (${jos.length})', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: AppColors.muted)),
                         const SizedBox(height: 4),
                         if (jos.isEmpty)
                           const Padding(padding: EdgeInsets.only(bottom: 12), child: Text('None available'))
@@ -172,7 +173,7 @@ class AdminMonitoringPanel extends StatelessWidget {
                             subtitle: Text(entry.value.dutyStatus == 'night' ? 'Night duty' : 'Day duty'),
                           )),
                         const SizedBox(height: 12),
-                        Text('CF (${cfs.length})', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.grey)),
+                        Text('CF (${cfs.length})', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: AppColors.muted)),
                         const SizedBox(height: 4),
                         if (cfs.isEmpty)
                           const Padding(padding: EdgeInsets.only(bottom: 4), child: Text('None available'))

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/helper.dart';
 import '../models/machine.dart';
 import '../widgets_root_back_scope.dart';
+import '../utils/app_colors.dart';
 
 /// Creates a running work order for helper(s) without assigning the logged-in
 /// technician to the work order. The technician therefore remains available.
@@ -416,7 +417,7 @@ class _AssignHelperTaskScreenState extends State<AssignHelperTaskScreen> {
             if (_errorText != null)
               Padding(
                 padding: const EdgeInsets.only(bottom: 12),
-                child: Text(_errorText!, style: const TextStyle(color: Colors.red)),
+                child: Text(_errorText!, style: const TextStyle(color: AppColors.danger)),
               ),
             SizedBox(
               height: 50,

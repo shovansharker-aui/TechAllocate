@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../models/helper.dart';
+import '../utils/app_colors.dart';
 
 class AddHelperScreen extends StatefulWidget {
   const AddHelperScreen({super.key});
@@ -121,7 +122,7 @@ class _AddHelperScreenState extends State<AddHelperScreen> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       'CFs do not log in to TechAllocate. They are only attached to a Junior Officer\'s active task.',
-                      style: TextStyle(color: Colors.grey),
+                      style: TextStyle(color: AppColors.muted),
                     ),
                   ),
                   const SizedBox(height: 18),
@@ -131,10 +132,10 @@ class _AddHelperScreenState extends State<AddHelperScreen> {
                       margin: const EdgeInsets.only(bottom: 14),
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.red.withValues(alpha: .08),
+                        color: AppColors.danger.withValues(alpha: .08),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Text(_error!, style: const TextStyle(color: Colors.red)),
+                      child: Text(_error!, style: const TextStyle(color: AppColors.danger)),
                     ),
                   SizedBox(
                     width: double.infinity,

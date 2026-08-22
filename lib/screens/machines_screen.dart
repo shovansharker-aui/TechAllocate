@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../models/machine.dart';
+import '../utils/app_colors.dart';
 
 class MachinesScreen extends StatefulWidget {
   const MachinesScreen({super.key});
@@ -124,11 +125,11 @@ class _MachinesScreenState extends State<MachinesScreen> {
   Color _categoryColor(String category) {
     switch (category) {
       case 'Engineering':
-        return Colors.indigo;
+        return AppColors.categoryEngineering;
       case 'Warehouse':
-        return Colors.brown;
+        return AppColors.categoryWarehouse;
       default:
-        return Colors.teal;
+        return AppColors.categoryProduction;
     }
   }
 
@@ -288,7 +289,7 @@ class _MachineFormSheetState extends State<_MachineFormSheet> {
                   IconButton(
                     tooltip: 'Delete machine',
                     onPressed: _isSaving ? null : _delete,
-                    icon: const Icon(Icons.delete_outline, color: Colors.red),
+                    icon: const Icon(Icons.delete_outline, color: AppColors.danger),
                   ),
               ],
             ),
@@ -318,7 +319,7 @@ class _MachineFormSheetState extends State<_MachineFormSheet> {
             if (_errorText != null)
               Padding(
                 padding: const EdgeInsets.only(bottom: 12),
-                child: Text(_errorText!, style: const TextStyle(color: Colors.red)),
+                child: Text(_errorText!, style: const TextStyle(color: AppColors.danger)),
               ),
             SizedBox(
               width: double.infinity,

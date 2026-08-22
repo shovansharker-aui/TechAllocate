@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../main.dart';
 import '../services/technician_session_service.dart';
 import '../widgets_root_back_scope.dart';
+import '../utils/app_colors.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -120,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const Icon(
                     Icons.engineering,
                     size: 76,
-                    color: Colors.blue,
+                    color: AppColors.primary,
                   ),
                   const SizedBox(height: 16),
                   const Text(
@@ -135,7 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     'Employee Login',
                     style: TextStyle(
                       fontSize: 16,
-                      color: Colors.grey.shade700,
+                      color: AppColors.mutedDark,
                     ),
                   ),
                   const SizedBox(height: 30),
@@ -176,12 +177,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       margin: const EdgeInsets.only(bottom: 16),
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.red.withValues(alpha: 0.08),
+                        color: AppColors.danger.withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
                         _errorMessage!,
-                        style: const TextStyle(color: Colors.red),
+                        style: const TextStyle(color: AppColors.danger),
                       ),
                     ),
                   SizedBox(

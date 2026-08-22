@@ -4,6 +4,7 @@ import 'screens/login_screen.dart';
 import 'screens/technician_session_gate.dart';
 import 'services/technician_session_service.dart';
 import 'firebase_options.dart';
+import 'utils/app_colors.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +25,7 @@ class TechAllocateApp extends StatelessWidget {
       title: 'TechAllocate',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
         useMaterial3: true,
       ),
       home: const AuthGate(),

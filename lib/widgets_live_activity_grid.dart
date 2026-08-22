@@ -7,6 +7,7 @@ import 'models/machine.dart';
 import 'models/work_order.dart';
 import 'models/app_user.dart';
 import 'utils/task_type.dart';
+import 'utils/app_colors.dart';
 
 class LiveActivityGrid extends StatefulWidget {
   const LiveActivityGrid({super.key});
@@ -121,9 +122,9 @@ class _LiveActivityGridState extends State<LiveActivityGrid> {
                                     const SizedBox(height: 8),
                                     Row(
                                       children: [
-                                        const Icon(Icons.timer_outlined, size: 13, color: Colors.grey),
+                                        const Icon(Icons.timer_outlined, size: 13, color: AppColors.muted),
                                         const SizedBox(width: 4),
-                                        Text(_duration(order.startedAt), style: const TextStyle(fontSize: 11, color: Colors.grey, fontWeight: FontWeight.w600)),
+                                        Text(_duration(order.startedAt), style: const TextStyle(fontSize: 11, color: AppColors.muted, fontWeight: FontWeight.w600)),
                                       ],
                                     ),
                                   ],
@@ -147,12 +148,12 @@ class _LiveActivityGridState extends State<LiveActivityGrid> {
   Widget _peopleRow(BuildContext context, IconData icon, List<String> names, String emptyLabel) {
     if (names.isEmpty) {
       if (emptyLabel.isEmpty) return const SizedBox.shrink();
-      return Row(children: [Icon(icon, size: 13, color: Colors.grey), const SizedBox(width: 4), Expanded(child: Text(emptyLabel, style: const TextStyle(fontSize: 12, color: Colors.grey)))]);
+      return Row(children: [Icon(icon, size: 13, color: AppColors.muted), const SizedBox(width: 4), Expanded(child: Text(emptyLabel, style: const TextStyle(fontSize: 12, color: AppColors.muted)))]);
     }
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 13, color: Colors.grey),
+        Icon(icon, size: 13, color: AppColors.muted),
         const SizedBox(width: 4),
         Expanded(
           child: Wrap(
